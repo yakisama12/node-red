@@ -218,18 +218,19 @@ RED.library = (function() {
             e.preventDefault();
         });
 
-        libraryEditor = ace.edit('node-select-library-text');
-        libraryEditor.setTheme("ace/theme/tomorrow");
-        if (options.mode) {
-            libraryEditor.getSession().setMode(options.mode);
-        }
-        libraryEditor.setOptions({
-            readOnly: true,
-            highlightActiveLine: false,
-            highlightGutterLine: false
-        });
-        libraryEditor.renderer.$cursorLayer.element.style.opacity=0;
-        libraryEditor.$blockScrolling = Infinity;
+        libraryEditor = options.editor;
+        //libraryEditor = ace.edit('node-select-library-text');
+        //libraryEditor.setTheme("ace/theme/tomorrow");
+        //if (options.mode) {
+            //libraryEditor.getSession().setMode(options.mode);
+        //}
+        //libraryEditor.setOptions({
+            //readOnly: true,
+            //highlightActiveLine: false,
+            //highlightGutterLine: false
+        //});
+        //libraryEditor.renderer.$cursorLayer.element.style.opacity=0;
+        //libraryEditor.$blockScrolling = Infinity;
 
         $( "#node-dialog-library-lookup" ).dialog({
             title: RED._("library.typeLibrary", {type:options.type}),
