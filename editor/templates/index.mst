@@ -27,7 +27,11 @@
 <link href="vendor/jquery/css/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="vendor/vendor.css">
+<link rel="stylesheet" href="vendor/orion/code_edit/built-codeEdit.css">
+<link rel="stylesheet" href="vendor/orion/editorTheme.css">
+<link rel="stylesheet" href="vendor/orion/node-red-editor.css">
 <link rel="stylesheet" href="red/style.min.css">
+<script src="vendor/orion/code_edit/built-codeEdit.min.js"></script>
 {{#page.css}}
 <link rel="stylesheet" href="{{.}}">
 {{/page.css}}
@@ -173,8 +177,6 @@
 </script>
 
 <script src="vendor/vendor.js"></script>
-<script src="vendor/ace/ace.js"></script>
-<script src="vendor/ace/ext-language_tools.js"></script>
 <script src="{{ asset.red }}"></script>
 
 </body>

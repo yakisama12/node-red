@@ -646,7 +646,6 @@ RED.editor = (function() {
             }
         });
 
-
         prepareEditDialog(configNode,node_def,"node-config-input");
 
         var buttons = $( "#node-config-dialog" ).dialog("option","buttons");
@@ -938,7 +937,6 @@ RED.editor = (function() {
         $("#subflow-dialog form" ).submit(function(e) { e.preventDefault();});
     }
 
-
     function showEditSubflowDialog(subflow) {
         editing_node = subflow;
         RED.view.state(RED.state.EDITING);
@@ -956,8 +954,6 @@ RED.editor = (function() {
         $("#subflow-dialog").dialog("option","title",RED._("subflow.editSubflow",{name:subflow.name})).dialog( "open" );
     }
 
-
-
     return {
         init: function(){
             createDialog();
@@ -970,31 +966,11 @@ RED.editor = (function() {
         validateNode: validateNode,
         updateNodeProperties: updateNodeProperties, // TODO: only exposed for edit-undo
 
-        createEditor: function(options) {
-            var editor = ace.edit(options.id);
-            editor.setTheme("ace/theme/tomorrow");
-            var session = editor.getSession();
-            if (options.mode) {
-                session.setMode(options.mode);
-            }
-            if (options.foldStyle) {
-                session.setFoldStyle(options.foldStyle);
-            } else {
-                session.setFoldStyle('markbeginend');
-            }
-            if (options.options) {
-                editor.setOptions(options.options);
-            } else {
-                editor.setOptions({
-                    enableBasicAutocompletion:true,
-                    enableSnippets:true
-                });
-            }
-            editor.$blockScrolling = Infinity;
-            if (options.value) {
-                session.setValue(options.value,-1);
-            }
-            return editor;
+        createEditor: function(options, callback) {
+            var codeEdit = new orion.codeEdit();
+            codeEdit.create({parent: options.id}).then(function(editorView){
+                callback(editorView);
+            });
         }
     }
 })();

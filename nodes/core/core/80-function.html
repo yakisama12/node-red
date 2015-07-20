@@ -97,7 +97,9 @@
                 var editorRow = $("#dialog-form>div.node-text-editor-row");
                 height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
                 $(".node-text-editor").css("height",height+"px");
-                that.editor.resize();
+                if (that.editorView && that.editorView.editor) {
+                   that.editorView.editor.focus();
+                }
             }
             $( "#dialog" ).on("dialogresize", functionDialogResize);
             $( "#dialog" ).one("dialogopen", function(ev) {
@@ -113,34 +115,53 @@
                 $( "#dialog" ).off("dialogresize",functionDialogResize);
             });
 
-            this.editor = RED.editor.createEditor({
-                id: 'node-input-func-editor',
-                mode: 'ace/mode/javascript',
-                value: $("#node-input-func").val()
+            RED.editor.createEditor({
+                id: 'node-input-func-editor'
+            }, function(editorView) {
+               that.editorView = editorView;
+               RED.library.create({
+                   url:"functions", // where to get the data from
+                   type:"function", // the type of object the library is for
+                   editor:that.editorView.editor, // the field name the main text body goes to
+                   mode:"ace/mode/javascript",
+                   fields:['name','outputs']
+               });
+               var contents = $("#node-input-func").val();
+               //Code to overwrite Orion's showProblems API so that we can filter out some error messsages like "illegal return statement", "msg is undefined"
+               //As we are validating the body of a function without passing the parameters to the editor, we need to filter out some generic js validaiton erros.
+               var baseAPI = that.editorView.editor.showProblems;
+               that.editorView.editor.showProblems =  function(problems) {
+                   var filteredProblems = problems.filter(function(prob){
+                       var illegalReturnError = prob.data && prob.data.tokenValue === "return";
+                       //If you really want the "*** is undefined" errors appear for Node Red for a better validation behavior, then do not filter out globalUndefinedError.
+                       //Then hover on the errors and use quick fix to resolve the errors.
+                       var globalUndefinedError = prob.id && prob.id.indexOf("no-undef-defined") >= 0;//Filter out the "*** is undefined" error but this will remove all the errors for undefined vars
+                       return !illegalReturnError && !globalUndefinedError;
+                   });
+                   baseAPI.call(that.editorView.editor, filteredProblems);
+               }
+               //End of code to overwrite Orion's showProblems API
+               that.editorView.setContents(contents, 'application/javascript');
+               that.editorView.editor.getTextView().setOptions({themeClass: "editorTheme"});
+               that.editorView.editor.focus();
             });
-
-            RED.library.create({
-                url:"functions", // where to get the data from
-                type:"function", // the type of object the library is for
-                editor:this.editor, // the field name the main text body goes to
-                mode:"ace/mode/javascript",
-                fields:['name','outputs']
-            });
-            this.editor.focus();
         },
         oneditsave: function() {
-            var annot = this.editor.getSession().getAnnotations();
+            var annotationModel = this.editorView.editor.getAnnotationModel();
+            var annotations = annotationModel.getAnnotations();
             this.noerr = 0;
             $("#node-input-noerr").val(0);
-            for (var k=0; k < annot.length; k++) {
-                //console.log(annot[k].type,":",annot[k].text, "on line", annot[k].row);
-                if (annot[k].type === "error") {
-                    $("#node-input-noerr").val(annot.length);
-                    this.noerr = annot.length;
-                }
+            while(annotations.hasNext()) {
+               var annotaion = annotations.next();
+               if(annotaion.type === "orion.annotation.error") {
+                    $("#node-input-noerr").val(1);
+                    this.noerr = 1;
+                    break;
+               }
             }
-            $("#node-input-func").val(this.editor.getValue());
-            delete this.editor;
+            $("#node-input-func").val(this.editorView.editor.getValue());
+            this.editorView.destroy();
+            delete this.editorView;
         }
     });
 </script>

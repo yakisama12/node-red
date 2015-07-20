@@ -192,7 +192,6 @@ var RED = (function() {
         });
 
         RED.user.init();
-
         RED.library.init();
         RED.palette.init();
         RED.sidebar.init();
@@ -214,13 +213,9 @@ var RED = (function() {
     }
 
     $(function() {
-
         if ((window.location.hostname !== "localhost") && (window.location.hostname !== "127.0.0.1")) {
             document.title = document.title+" : "+window.location.hostname;
         }
-
-        ace.require("ace/ext/language_tools");
-
         RED.i18n.init(function() {
             RED.settings.init(loadEditor);
         })
