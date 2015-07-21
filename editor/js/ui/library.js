@@ -223,10 +223,17 @@ RED.library = (function() {
         RED.editor.createEditor({
                 id: 'node-select-library-text'
             }, function(editorView) {
+            if (options.mode) {
+                var contents = editorView.editor.getText();
+                editorView.setContents(contents, options.mode);
+            }
+            editorView.editor.getTextView().setOptions({themeClass: "editorTheme"});
+            editorView.editor.getTextView().setOptions({showLinesRuler: false});
+            editorView.editor.getTextView().setOptions({showAnnotationRuler: false});
+            editorView.editor.getTextView().setOptions({showOverviewRuler: false});
+            editorView.editor.getTextView().setOptions({showFoldingRuler: false});
+            editorView.editor.getTextView().setOptions({readonly: true});
             libraryEditor = editorView.editor;
-            //editorView.setContents(contents, 'application/javascript');
-            //libraryEditor.setText('node-select-library-text');
-            libraryEditor.getTextView().setOptions({themeClass: "editorTheme"});
             libraryEditor.focus();
         });
 
