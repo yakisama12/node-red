@@ -132,7 +132,8 @@ RED.library = (function() {
                            $(this).addClass("list-selected");
                            $.get("library/"+options.url+root+item.fn, function(data) {
                                    selectedLibraryItem = item;
-                                   libraryEditor.setValue(data,-1);
+                                   //libraryEditor.setValue(data,-1);
+                                   libraryEditor.setText(data);
                            });
                        }
                    })();
@@ -157,7 +158,8 @@ RED.library = (function() {
             $("#node-select-library").children().remove();
             var bc = $("#node-dialog-library-breadcrumbs");
             bc.children().first().nextAll().remove();
-            libraryEditor.setValue('',-1);
+            //libraryEditor.setValue('',-1);
+            libraryEditor.setText('');
 
             $.getJSON("library/"+options.url,function(data) {
                 $("#node-select-library").append(buildFileList("/",data));
@@ -218,7 +220,16 @@ RED.library = (function() {
             e.preventDefault();
         });
 
-        libraryEditor = options.editor;
+        RED.editor.createEditor({
+                id: 'node-select-library-text'
+            }, function(editorView) {
+            libraryEditor = editorView.editor;
+            //editorView.setContents(contents, 'application/javascript');
+            //libraryEditor.setText('node-select-library-text');
+            libraryEditor.getTextView().setOptions({themeClass: "editorTheme"});
+            libraryEditor.focus();
+        });
+
         //libraryEditor = ace.edit('node-select-library-text');
         //libraryEditor.setTheme("ace/theme/tomorrow");
         //if (options.mode) {
@@ -247,7 +258,8 @@ RED.library = (function() {
                                 var field = options.fields[i];
                                 $("#node-input-"+field).val(selectedLibraryItem[field]);
                             }
-                            options.editor.setValue(libraryEditor.getValue(),-1);
+                            //options.editor.setValue(libraryEditor.getValue(),-1);
+                            options.editor.setValue(libraryEditor.getText(),-1);
                         }
                         $( this ).dialog( "close" );
                     }
