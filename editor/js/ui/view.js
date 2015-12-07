@@ -84,7 +84,7 @@ RED.view = (function() {
         .on("touchend", function() {
             clearTimeout(touchStartTime);
             touchStartTime = null;
-            if  (RED.touch.radialMenu.active()) {
+            if (RED.touch.radialMenu.active()) {
                 return;
             }
             if (lasso) {
@@ -382,12 +382,12 @@ RED.view = (function() {
             }
         });
 
-        RED.keyboard.add(/* z */ 90,{ctrl:true},function(){RED.history.pop();});
-        RED.keyboard.add(/* a */ 65,{ctrl:true},function(){selectAll();d3.event.preventDefault();});
+        RED.keyboard.add(/* z */ 90,{ctrl:true},null,function(){RED.history.pop();});
+        RED.keyboard.add(/* a */ 65,{ctrl:true},null,function(){selectAll();d3.event.preventDefault();});
         RED.keyboard.add(/* = */ 187,{ctrl:true},function(){zoomIn();d3.event.preventDefault();});
         RED.keyboard.add(/* - */ 189,{ctrl:true},function(){zoomOut();d3.event.preventDefault();});
         RED.keyboard.add(/* 0 */ 48,{ctrl:true},function(){zoomZero();d3.event.preventDefault();});
-        RED.keyboard.add(/* v */ 86,{ctrl:true},function(){importNodes(clipboard);d3.event.preventDefault();});
+        RED.keyboard.add(/* v */ 86,{ctrl:true},null,function(){importNodes(clipboard);d3.event.preventDefault();});
 
     }
 
@@ -690,8 +690,8 @@ RED.view = (function() {
         } else {
             RED.keyboard.add(/* backspace */ 8,function(){deleteSelection();d3.event.preventDefault();});
             RED.keyboard.add(/* delete */ 46,function(){deleteSelection();d3.event.preventDefault();});
-            RED.keyboard.add(/* c */ 67,{ctrl:true},function(){copySelection();d3.event.preventDefault();});
-            RED.keyboard.add(/* x */ 88,{ctrl:true},function(){copySelection();deleteSelection();d3.event.preventDefault();});
+            RED.keyboard.add(/* c */ 67,{ctrl:true},null,function(){copySelection();d3.event.preventDefault();});
+            RED.keyboard.add(/* x */ 88,{ctrl:true},null,function(){copySelection();deleteSelection();d3.event.preventDefault();});
         }
         if (moving_set.length === 0) {
             RED.keyboard.remove(/* up   */ 38);
