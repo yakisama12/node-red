@@ -23,6 +23,7 @@ module.exports = function(RED) {
 
         if (n.event) {
             var handler = function(msg) {
+                msg._event = n.event;
                 node.receive(msg);
             }
             RED.events.on("node:"+n.event,handler);
@@ -42,6 +43,7 @@ module.exports = function(RED) {
         var node = this;
         if (n.event) {
             this.on("input", function(msg) {
+                msg._event = n.event;
                 RED.events.emit("node:"+n.event,msg)
             });
         }
