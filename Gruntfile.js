@@ -145,6 +145,11 @@ module.exports = function(grunt) {
                     "public/vendor/vendor.css": [
                         // TODO: resolve relative resource paths in
                         //       bootstrap/FA/jquery
+                    ],
+                    "public/vendor/vendor-jquery.js": [
+                        "editor/vendor/jquery/js/jquery-1.11.3.min.js",
+                        "editor/vendor/jquery/js/jquery-ui-1.10.3.custom.min.js",
+                        "editor/vendor/jquery/js/jquery.ui.touch-punch.min.js",
                     ]
                 }
             }
