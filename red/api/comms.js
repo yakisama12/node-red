@@ -14,7 +14,6 @@
  * limitations under the License.
  **/
 
-var ws = require("ws");
 var log;
 
 var server;
@@ -49,17 +48,8 @@ function start() {
     if (!settings.disableEditor) {
         Users.default().then(function(anonymousUser) {
             var webSocketKeepAliveTime = settings.webSocketKeepAliveTime || 15000;
-            var path = settings.httpAdminRoot || "/";
-            path = (path.slice(0,1) != "/" ? "/":"") + path + (path.slice(-1) == "/" ? "":"/") + "comms";
-            wsServer = new ws.Server({
-                server:server,
-                path:path,
-                // Disable the deflate option due to this issue
-                //  https://github.com/websockets/ws/pull/632
-                // that is fixed in the 1.x release of the ws module
-                // that we cannot currently pickup as it drops node 0.10 support
-                perMessageDeflate: false
-            });
+            
+            wsServer = require('socket.io')(server);
 
             wsServer.on('connection',function(ws) {
                 log.audit({event: "comms.open"});
