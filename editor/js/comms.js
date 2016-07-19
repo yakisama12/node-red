@@ -33,9 +33,10 @@ RED.comms = (function() {
         if (port.length !== 0) {
             path = path+":"+port;
         }
-        path = path+document.location.pathname;
-        path = path+(path.slice(-1) == "/"?"":"/")+"comms";
-        path = "ws"+(document.location.protocol=="https:"?"s":"")+"://"+path;
+        
+        path = "http"+(document.location.protocol=="https:"?"s":"")+"://"+path;
+
+        console.log(path);
 
         var auth_tokens = RED.settings.get("auth-tokens");
         pendingAuth = (auth_tokens!=null);
@@ -48,7 +49,7 @@ RED.comms = (function() {
             }
         }
 
-        ws = new WebSocket(path);
+        ws = io.connect(path);
         ws.onopen = function() {
             reconnectAttempts = 0;
             if (errornotification) {
